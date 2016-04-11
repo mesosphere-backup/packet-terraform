@@ -1,0 +1,8 @@
+config.yaml
+ip-detect
+masters.sh
+agents.sh
+agent-list
+master-list
+bootstrap-ip
+terraform*

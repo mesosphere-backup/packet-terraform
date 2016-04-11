@@ -1,0 +1,9 @@
+output "agent-ip" {
+  value = "${join(",", packet_device.dcos_agent.*.network.0.address)}"
+}
+output "master-ip" {
+  value = "${join(",", packet_device.dcos_master.*.network.0.address)}"
+}
+output "bootstrap-ip" {
+  value = "${packet_device.dcos_bootstrap.network.0.address}"
+}
