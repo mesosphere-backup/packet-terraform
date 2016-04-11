@@ -46,11 +46,12 @@ sudo bash dcos_install.sh slave
 FIN
 
 # Prep and create the installer
-ssh-keygen -R $BOOTSTRAP_IP
-ssh-keyscan -H $BOOTSTRAP_IP
-ssh core@$BOOTSTRAP_IP mkdir /tmp/genconf
-scp ip-detect core@$BOOTSTRAP_IP:/tmp/genconf/ip-detect
-scp config.yaml core@$BOOTSTRAP_IP:/tmp/genconf/config.yaml
-ssh core@$BOOTSTRAP_IP "cd /tmp/ && bash dcos_generate_config.sh"
-ssh core@$BOOTSTRAP_IP docker run -d -p 2181:2181 -p 2888:2888 -p 3888:3888 --name=dcos_int_zk jplock/zookeeper
-ssh core@$BOOTSTRAP_IP docker run -d -p 4040:80 -v /tmp/genconf/serve:/usr/share/nginx/html:ro nginx
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null core@$BOOTSTRAP_IP mkdir /tmp/genconf
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null ip-detect core@$BOOTSTRAP_IP:/tmp/genconf/ip-detect
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null config.yaml core@$BOOTSTRAP_IP:/tmp/genconf/config.yaml
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null core@$BOOTSTRAP_IP "cd /tmp/ && bash dcos_generate_config.sh"
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null core@$BOOTSTRAP_IP docker run -d -p 2181:2181 -p 2888:2888 -p 3888:3888 --name=dcos_int_zk jplock/zookeeper
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null core@$BOOTSTRAP_IP docker run -d -p 4040:80 -v /tmp/genconf/serve:/usr/share/nginx/html:ro nginx
+# Distribute the installer
+pssh -h master-list -iv -X "-o StrictHostKeyChecking=no" -X "-o UserKnownHostsFile=/dev/null" -X "-o GlobalKnownHostsFile=/dev/null" -X -T -I -t 0 -l core < masters.sh 
+pssh -h agent-list -iv -X "-o StrictHostKeyChecking=no" -X "-o UserKnownHostsFile=/dev/null" -X "-o GlobalKnownHostsFile=/dev/null" -X -T -I -t 0 -l core < agents.sh 
