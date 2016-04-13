@@ -24,7 +24,7 @@ variable "packet_boot_type" {
 }
 
 variable "dcos_master_count" {
-  default = 3
+  default = "3"
 }
 
 variable "dcos_agent_count" {
@@ -36,5 +36,17 @@ variable "dcos_public_agent_count" {
 }
 
 variable "dcos_init_pubkey" {
-  description = "Your public SSH key"
+  description = "Your public SSH key path"
+}
+
+variable "dcos_installer_url" {
+  description = "Where to get DCOS"
+} 
+
+variable "key_file_path" {
+  description = "Your SSH key for the project"
+}
+
+variable "dcos_user" {
+  description = "Username for SSH connections"
 }
