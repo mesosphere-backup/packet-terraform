@@ -31,6 +31,10 @@ variable "dcos_agent_count" {
   description = "Number of agents to deploy"
 }
 
+variable "dcos_public_agent_count" {
+  description = "Number of agents to deploy"
+}
+
 variable "dcos_init_pubkey" {
   description = "Your public SSH key"
 }

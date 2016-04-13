@@ -1,4 +1,10 @@
 config.yaml
+public-agent.sh
+agent.sh
+error-logs/
+master.sh
+output-logs/
+public-agent-list
 ip-detect
 masters.sh
 agents.sh
