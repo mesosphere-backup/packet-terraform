@@ -11,6 +11,11 @@ variable "packet_facility" {
   description = "Packet facility: [ewr1|sjc1|ams1]"
 }
 
+variable "bootstrap_timeout" {
+  default = "120"
+  description = "Timeout for installer to be built"
+}
+
 variable "packet_agent_type" {
   description = "Type of Agent"
 }
@@ -22,6 +27,10 @@ variable "packet_master_type" {
 variable "packet_boot_type" {
   default = "baremetal_0"
 }
+
+variable "dcos_cluster_name" {
+  default = "packet-dcos"
+} 
 
 variable "dcos_master_count" {
   default = "3"

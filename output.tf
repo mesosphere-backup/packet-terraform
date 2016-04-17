@@ -10,3 +10,6 @@ output "master-ip" {
 output "bootstrap-ip" {
   value = "${packet_device.dcos_bootstrap.network.0.address}"
 }
+output "Use this link to access DCOS" {
+  value = "http://${packet_device.dcos_master.1.network.0.address}/"
+}

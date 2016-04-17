@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
-
+. ./ips.txt
 # Make some config files
 cat > config.yaml << FIN
-bootstrap_url: http://${packet_device.dcos_bootstrap.network.0.address}:4040
-cluster_name: ${dcos_cluster_name}
+bootstrap_url: http://$BOOTSTRAP:4040
+cluster_name: $CLUSTER_NAME
 exhibitor_storage_backend: zookeeper
-exhibitor_zk_hosts: ${packet_device.dcos_bootstrap.network.0.address}:2181
-exhibitor_zk_path: /${dcos_cluster_name}
+exhibitor_zk_hosts: $BOOTSTRAP:2181
+exhibitor_zk_path: /$CLUSTER_NAME
 log_directory: /genconf/logs
 master_discovery: static
 master_list:
-- ${packet_device.dcos_master.0.network.0.address}
-- ${packet_device.dcos_master.1.network.0.address}
-- ${packet_device.dcos_master.2.network.0.address}
+- $MASTER_00
+- $MASTER_01
+- $MASTER_02
 resolvers: 
 - 8.8.4.4
 - 8.8.8.8
@@ -30,6 +30,7 @@ FIN
 cat > do-install.sh << FIN
 #!/usr/bin/env bash
 mkdir /tmp/dcos && cd /tmp/dcos           
-curl -O http://{packet_device.dcos_bootstrap.network.0.address}:4040/dcos_install.sh
-sudo bash dcos_install.sh $1
+curl -O http://$BOOTSTRAP:4040/dcos_install.sh
+sudo bash dcos_install.sh \$1
 FIN
+rm -rf ./ips.txt

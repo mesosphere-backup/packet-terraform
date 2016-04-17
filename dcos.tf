@@ -14,8 +14,8 @@ resource "packet_device" "dcos_bootstrap" {
   billing_cycle = "hourly"
   provisioner "remote-exec" {
   inline = [
-    "wget -q -P /tmp ${var.dcos_installer_url}",
-    "mkdir /tmp/genconf"
+    "wget -q -O dcos_generate_config.sh -P $HOME ${var.dcos_installer_url}",
+    "mkdir $HOME/genconf"
     ]
     connection {
       user = "${var.dcos_user}"
@@ -23,11 +23,17 @@ resource "packet_device" "dcos_bootstrap" {
     }
   }
   provisioner "local-exec" {
+    command = "echo BOOTSTRAP=\"${packet_device.dcos_bootstrap.network.0.address}\" >> ips.txt"
+  }
+  provisioner "local-exec" {
+    command = "echo CLUSTER_NAME=\"${var.dcos_cluster_name}\" >> ips.txt"
+  }  
+  provisioner "local-exec" {
     command = "./make-files.sh"
   }
   provisioner "file" {
     source = "./ip-detect"
-    destination = "/tmp/genconf/ip-detect"
+    destination = "$HOME/genconf/ip-detect"
     connection {
       user = "${var.dcos_user}"
       private_key = "${var.key_file_path}"
@@ -35,16 +41,16 @@ resource "packet_device" "dcos_bootstrap" {
   }
   provisioner "file" {
     source = "./config.yaml"
-    destination = "/tmp/genconf/config.yaml"
+    destination = "$HOME/genconf/config.yaml"
       connection {
       user = "${var.dcos_user}"
       private_key = "${var.key_file_path}"
     }
   }
   provisioner "remote-exec" {
-    inline = ["sudo bash /tmp/dcos_generate_config.sh",
-              "docker run -d -p 2181:2181 -p 2888:2888 -p 3888:3888 --name=dcos_int_zk jplock/zookeeper",
-              "docker run -d -p 4040:80 -v /tmp/genconf/serve:/usr/share/nginx/html:ro nginx"
+    inline = ["sudo bash $HOME/dcos_generate_config.sh",
+              "docker run -d -p 4040:80 -v $HOME/genconf/serve:/usr/share/nginx/html:ro nginx 2>/dev/null",
+              "docker run -d -p 2181:2181 -p 2888:2888 -p 3888:3888 --name=dcos_int_zk jplock/zookeeper 2>/dev/null"
               ]
     connection {
       user = "${var.dcos_user}"
@@ -64,18 +70,21 @@ resource "packet_device" "dcos_master" {
   project_id    = "${var.packet_project_id}"
   billing_cycle = "hourly"
   provisioner "local-exec" {
-    command = "sleep 45"
+    command = "echo ${format("MASTER_%02d", count.index)}=\"${self.network.0.address}\" >> ips.txt"
+  }
+  provisioner "local-exec" {
+    command = "sleep ${var.bootstrap_timeout}"
   }
   provisioner "file" {
-    source = "do-install.sh"
-    destination = "/tmp/genconf/do-install.sh"
+    source = "./do-install.sh"
+    destination = "/tmp/do-install.sh"
     connection {
       user = "${var.dcos_user}"
       private_key = "${var.key_file_path}"
     }
   }
   provisioner "remote-exec" {
-    inline = "bash /tmp/genconf/do-install.sh master"
+    inline = "bash /tmp/do-install.sh master"
     connection {
       user = "${var.dcos_user}"
       private_key = "${var.key_file_path}"
@@ -96,14 +105,14 @@ resource "packet_device" "dcos_agent" {
   billing_cycle = "hourly"  
   provisioner "file" {
     source = "do-install.sh"
-    destination = "/tmp/genconf/do-install.sh"
+    destination = "/tmp/do-install.sh"
     connection {
       user = "${var.dcos_user}"
       private_key = "${var.key_file_path}"
     }
   }
   provisioner "remote-exec" {
-    inline = "bash /tmp/genconf/do-install.sh slave"
+    inline = "bash /tmp/do-install.sh slave"
     connection {
       user = "${var.dcos_user}"
       private_key = "${var.key_file_path}"
@@ -125,14 +134,14 @@ resource "packet_device" "dcos_public_agent" {
   billing_cycle = "hourly"  
   provisioner "file" {
     source = "do-install.sh"
-    destination = "/tmp/genconf/do-install.sh"
+    destination = "/tmp/do-install.sh"
     connection {
       user = "${var.dcos_user}"
       private_key = "${var.key_file_path}"
     }
   }  
   provisioner "remote-exec" {
-    inline = "bash /tmp/genconf/do-install.sh slave_public"
+    inline = "bash /tmp/do-install.sh slave_public"
     connection {
       user = "${var.dcos_user}"
       private_key = "${var.key_file_path}"
