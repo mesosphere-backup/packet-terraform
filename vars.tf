@@ -47,7 +47,7 @@ variable "dcos_public_agent_count" {
   default = "1"
 }
 
-variable "dcos_init_pubkey" {
+variable "dcos_ssh_public_key_path" {
   description = "Path to your public SSH key path"
   default = "./packet-key.pub"
 }
@@ -57,7 +57,7 @@ variable "dcos_installer_url" {
   default = "https://downloads.dcos.io/dcos/EarlyAccess/dcos_generate_config.sh"
 } 
 
-variable "key_file_path" {
+variable "dcos_ssh_key_path" {
   description = "Path to your private SSH key for the project"
   default = "./packet-key"
 }

@@ -21,6 +21,6 @@ dcos_public_agent_count = "3"
 
 # dcos_installer_url = "https://downloads.dcos.io/dcos/EarlyAccess/dcos_generate_config.sh"
 
-key_file_path = "./packet-key"
+dcos_ssh_key_path = "./packet-key"
 
-dcos_init_pubkey = "packet-key.pub"
+dcos_ssh_public_key_path = "packet-key.pub"
