@@ -61,8 +61,3 @@ variable "key_file_path" {
   description = "Path to your private SSH key for the project"
   default = "./packet-key"
 }
-
-variable "dcos_user" {
-  description = "Username for SSH connections"
-  default = "core"
-}

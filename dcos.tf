@@ -8,7 +8,7 @@ resource "packet_device" "dcos_bootstrap" {
   operating_system = "coreos_stable"
   plan             = "${var.packet_boot_type}"
   connection {
-    user = "${var.dcos_user}"
+    user = "core"
     private_key = "${var.key_file_path}"
   }
   user_data     = "#cloud-config\n\nssh_authorized_keys:\n  - \"${file("${var.dcos_init_pubkey}")}\"\n"
@@ -63,7 +63,7 @@ resource "packet_device" "dcos_master" {
   project_id    = "${var.packet_project_id}"
   billing_cycle = "hourly"
   connection {
-    user = "${var.dcos_user}"
+    user = "core"
     private_key = "${var.key_file_path}"
   }
   provisioner "local-exec" {
@@ -96,7 +96,7 @@ resource "packet_device" "dcos_agent" {
   project_id    = "${var.packet_project_id}"
   billing_cycle = "hourly"  
   connection {
-    user = "${var.dcos_user}"
+    user = "core"
     private_key = "${var.key_file_path}"
   }
   provisioner "local-exec" {
@@ -124,7 +124,7 @@ resource "packet_device" "dcos_public_agent" {
   project_id    = "${var.packet_project_id}"
   billing_cycle = "hourly"  
   connection {
-    user = "${var.dcos_user}"
+    user = "core"
     private_key = "${var.key_file_path}"
   }
   provisioner "local-exec" {

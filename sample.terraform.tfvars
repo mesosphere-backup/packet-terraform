@@ -23,6 +23,4 @@ dcos_public_agent_count = "3"
 
 key_file_path = "./packet-key"
 
-dcos_user = "core"
-
 dcos_init_pubkey = "packet-key.pub"
