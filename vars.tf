@@ -53,7 +53,8 @@ variable "dcos_init_pubkey" {
 }
 
 variable "dcos_installer_url" {
-  description = "Where to get DCOS"
+  description = "Path to get DCOS"
+  default = "https://downloads.dcos.io/dcos/EarlyAccess/dcos_generate_config.sh"
 } 
 
 variable "key_file_path" {

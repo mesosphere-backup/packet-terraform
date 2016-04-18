@@ -1,7 +1,7 @@
 
-packet_api_key = ""
+# packet_api_key = ""
 
-packet_project_id = ""
+# packet_project_id = ""
 
 packet_facility = "sjc1"
 
@@ -13,14 +13,16 @@ packet_boot_type = "baremetal_0"
 
 dcos_cluster_name = "packet-dcos"
 
-# dcos_agent_count = "3"
+dcos_master_count = "3"
 
-# dcos_public_agent_count = "3"
+dcos_agent_count = "4"
 
-dcos_installer_url = ""
+dcos_public_agent_count = "3"
 
-key_file_path = ""
+# dcos_installer_url = "https://downloads.dcos.io/dcos/EarlyAccess/dcos_generate_config.sh"
+
+key_file_path = "./packet-key"
 
 dcos_user = "core"
 
-dcos_init_pubkey = ""
+dcos_init_pubkey = "packet-key.pub"
