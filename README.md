@@ -5,6 +5,9 @@ Terraform scripts for packet.net
 1, 3, or 5 master DCOS cluster on the [packet.net](https://www.packet.net/)
 provider.
 
+#### With this method, the network is open by default. Because of this, network
+security is a concern and should be addressed as soon as possible by the administrator.
+
 ##### To use:
 
 Clone or download repo.
