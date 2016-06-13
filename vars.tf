@@ -14,7 +14,7 @@ variable "packet_facility" {
 
 variable "packet_agent_type" {
   description = "Instance type of Agent"
-  defaut = "baremetal_0"
+  default = "baremetal_0"
 }
 
 variable "packet_master_type" {
