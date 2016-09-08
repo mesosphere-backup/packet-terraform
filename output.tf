@@ -13,6 +13,3 @@ output "bootstrap-ip" {
 output "Use this link to access DCOS" {
   value = "http://${packet_device.dcos_master.network.0.address}/"
 }
-output "Use this link to access DCOS" {
-  value = "http://${packet_device.dcos_master.0.network.0.address}/"
-}
