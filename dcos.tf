@@ -9,7 +9,7 @@ resource "packet_device" "dcos_bootstrap" {
   plan             = "${var.packet_boot_type}"
   connection {
     user = "core"
-    private_key = "${var.dcos_ssh_key_path}"
+    private_key = "${file("${var.dcos_ssh_key_path}")}"
   }
   user_data     = "#cloud-config\n\nmanage_etc_hosts: \"localhost\"\nssh_authorized_keys:\n  - \"${file("${var.dcos_ssh_public_key_path}")}\"\n"
   facility      = "${var.packet_facility}"
@@ -23,7 +23,7 @@ resource "packet_device" "dcos_bootstrap" {
   }
   provisioner "local-exec" {
     command = "echo CLUSTER_NAME=\"${var.dcos_cluster_name}\" >> ips.txt"
-  }  
+  }
   provisioner "remote-exec" {
   inline = [
     "wget -q -O dcos_generate_config.sh -P $HOME ${var.dcos_installer_url}",
@@ -64,7 +64,7 @@ resource "packet_device" "dcos_master" {
   billing_cycle = "hourly"
   connection {
     user = "core"
-    private_key = "${var.dcos_ssh_key_path}"
+    private_key = "${file("${var.dcos_ssh_key_path}")}"
   }
   provisioner "local-exec" {
     command = "rm -rf ./do-install.sh"
@@ -94,10 +94,10 @@ resource "packet_device" "dcos_agent" {
   user_data     = "#cloud-config\n\nmanage_etc_hosts: \"localhost\"\nssh_authorized_keys:\n  - \"${file("${var.dcos_ssh_public_key_path}")}\"\n"
   facility      = "${var.packet_facility}"
   project_id    = "${var.packet_project_id}"
-  billing_cycle = "hourly"  
+  billing_cycle = "hourly"
   connection {
     user = "core"
-    private_key = "${var.dcos_ssh_key_path}"
+    private_key = "${file("${var.dcos_ssh_key_path}")}"
   }
   provisioner "local-exec" {
     command = "while [ ! -f ./do-install.sh ]; do sleep 1; done"
@@ -122,10 +122,10 @@ resource "packet_device" "dcos_public_agent" {
   user_data     = "#cloud-config\n\nmanage_etc_hosts: \"localhost\"\nssh_authorized_keys:\n  - \"${file("${var.dcos_ssh_public_key_path}")}\"\n"
   facility      = "${var.packet_facility}"
   project_id    = "${var.packet_project_id}"
-  billing_cycle = "hourly"  
+  billing_cycle = "hourly"
   connection {
     user = "core"
-    private_key = "${var.dcos_ssh_key_path}"
+    private_key = "${file("${var.dcos_ssh_key_path}")}"
   }
   provisioner "local-exec" {
     command = "while [ ! -f ./do-install.sh ]; do sleep 1; done"
